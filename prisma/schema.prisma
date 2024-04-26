@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccommodationStatus {
+  AVAILABLE
+  PENDING
+  RESERVED
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  name     String?
+  password String
+
+  @@map("users")
+}
+
+model Reservation {
+  id              String            @id @default(uuid())
+  checkInDate     DateTime          @map("check_in_date")
+  checkOutDate    DateTime          @map("check_out_date")
+  userId          String            @map("user_id")
+  accommodationId String            @map("accommodation_id")
+  status          ReservationStatus
+
+  accommodation Accommodation @relation(fields: [accommodationId], references: [id])
+  payment       Payment?
+
+  @@map("reservations")
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  amount        Float
+  paymentDate   DateTime @map("payment_date")
+  reservationId String   @unique @map("reservation_id")
+
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+
+  @@map("payments")
+}
+
+model Accommodation {
+  id          String              @id @default(uuid())
+  slug        String              @unique
+  name        String
+  description String
+  price       Float
+  status      AccommodationStatus @default(AVAILABLE)
+
+  Reservation Reservation[]
+  Image       Image[]
+
+  @@map("accommodations")
+}
+
+model Image {
+  id              String @id @default(uuid())
+  url             String
+  accommodationId String @map("accommodation_id")
+
+  accommodation Accommodation? @relation(fields: [accommodationId], references: [id])
+
+  @@map("images")
+}
