@@ -3,7 +3,6 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 export interface UserProps {
     name: string;
-    phone: string;
     email: string;
     password: string;
 }
@@ -12,10 +11,6 @@ export class User extends Entity<UserProps> {
 
     get name() {
         return this.props.name;
-    }
-
-    get phone() {
-        return this.props.phone;
     }
 
     get email() {

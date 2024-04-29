@@ -7,7 +7,7 @@ import { ReservationsRepository } from '../repositories/reservations-repository'
 interface CreateReservationUseCaseRequest {
     checkIn: Date;
     checkOut: Date;
-    accomodationId: string;
+    accommodationId: string;
     userId: string;
 }
 
@@ -23,7 +23,7 @@ export class CreateReservationUseCase {
     async execute({
         checkIn,
         checkOut,
-        accomodationId,
+        accommodationId: accomodationId,
         userId,
     }: CreateReservationUseCaseRequest): Promise<CreateReservationUseCaseResponse> {
 

@@ -1,7 +1,7 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Accommodation, AccommodationStatus } from '@/domain/hotel/enterprise/entities/accommodation';
 import { Slug } from '@/domain/hotel/enterprise/entities/value-objects/slug';
-import { $Enums, Prisma, Accommodation as PrismaAccommodation } from '@prisma/client';
+import { $Enums, Accommodation as PrismaAccommodation } from '@prisma/client';
 
 export class PrismaAccommodationMapper {
 

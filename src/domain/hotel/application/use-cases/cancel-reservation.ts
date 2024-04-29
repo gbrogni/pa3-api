@@ -1,5 +1,5 @@
 import { Either, left, right } from '@/core/either';
-import { Reservation } from '@/domain/hotel/enterprise/entities/reservation';
+import { Reservation, ReservationStatus } from '@/domain/hotel/enterprise/entities/reservation';
 import { Injectable } from '@nestjs/common';
 import { ReservationsRepository } from '../repositories/reservations-repository';
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
@@ -36,7 +36,7 @@ export class CancelReservationUseCase {
 
         reservation.cancel();
 
-        await this.reservationsRepository.save(reservation);
+        await this.reservationsRepository.updateStatus(reservation.id.toString(), ReservationStatus.CANCELLED);
 
         return right({ reservation });
     }

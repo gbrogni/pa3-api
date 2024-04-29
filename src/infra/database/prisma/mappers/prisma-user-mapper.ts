@@ -9,7 +9,6 @@ export class PrismaUserMapper {
             {
                 name: raw.name ?? '',
                 email: raw.email,
-                phone: raw.phone,
                 password: raw.password
             }, new UniqueEntityID(raw.id)
         );
@@ -20,7 +19,6 @@ export class PrismaUserMapper {
             id: user.id.toString(),
             name: user.name,
             email: user.email,
-            phone: user.phone,
             password: user.password
         };
     }
