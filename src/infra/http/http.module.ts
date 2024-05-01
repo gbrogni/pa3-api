@@ -11,6 +11,12 @@ import { FetchAccommodationsController } from './controllers/fetch-accommodation
 import { FetchAccommodationsUseCase } from '@/domain/hotel/application/use-cases/fetch-accommodations';
 import { GetAccommodationBySlugController } from './controllers/get-accommodation-by-slug.controller';
 import { GetAccommodationBySlugUseCase } from '@/domain/hotel/application/use-cases/get-accommodation-by-slug';
+import { GetAccommodationAvailabilityController } from './controllers/get-accommodation-availability.controller';
+import { GetAccommodationAvailabilityUseCase } from '@/domain/hotel/application/use-cases/get-accommodation-availability';
+import { FetchAccommodationsByRangeController } from './controllers/fetch-accommodations-by-range.controller';
+import { FetchAccommodationsByRangeUseCase } from '@/domain/hotel/application/use-cases/fetch-accommodations-by-range';
+import { MakePaymentController } from './controllers/make-payment.controller';
+import { MakePaymentUseCase } from '@/domain/hotel/application/use-cases/make-payment';
 
 @Module({
     imports: [DatabaseModule, CryptographyModule],
@@ -18,15 +24,21 @@ import { GetAccommodationBySlugUseCase } from '@/domain/hotel/application/use-ca
         AuthenticateController,
         CancelReservationController,
         CreateAccountController,
+        FetchAccommodationsByRangeController,
         FetchAccommodationsController,
-        GetAccommodationBySlugController
+        GetAccommodationAvailabilityController,
+        GetAccommodationBySlugController,
+        MakePaymentController
     ],
     providers: [
         AuthenticateUserUseCase,
         CancelReservationUseCase,
         CreateUserUseCase,
+        FetchAccommodationsByRangeUseCase,
         FetchAccommodationsUseCase,
-        GetAccommodationBySlugUseCase
+        GetAccommodationAvailabilityUseCase,
+        GetAccommodationBySlugUseCase,
+        MakePaymentUseCase
     ]
 })
 export class HttpModule { }

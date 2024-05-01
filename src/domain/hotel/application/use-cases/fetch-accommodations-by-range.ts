@@ -6,6 +6,7 @@ import { AccommodationsRepository } from '../repositories/accommodations-reposit
 interface FetchAccommodationsByRangeUseCaseRequest {
     startDate: Date;
     endDate: Date;
+    page: number;
 }
 
 type FetchAccommodationsByRangeUseCaseResponse = Either<null, { accommodations: Accommodation[] }>;
@@ -18,11 +19,12 @@ export class FetchAccommodationsByRangeUseCase {
     ) { }
 
     async execute({
+        page,
         startDate,
         endDate
     }: FetchAccommodationsByRangeUseCaseRequest): Promise<FetchAccommodationsByRangeUseCaseResponse> {
 
-        const accommodations = await this.accommodationsRepository.findByRange({ startDate, endDate });
+        const accommodations = await this.accommodationsRepository.findByRange({ page, startDate, endDate });
 
         return right({ accommodations });
     }

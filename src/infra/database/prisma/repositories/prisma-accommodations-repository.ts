@@ -35,8 +35,10 @@ export class PrismaAccommodationsRepository implements AccommodationsRepository 
         return PrismaAccommodationMapper.toDomain(accommodation);
     }
 
-    async findByRange({ startDate, endDate }: { startDate: Date, endDate: Date }): Promise<Accommodation[]> {
+    async findByRange({ page, startDate, endDate }: { page: number, startDate: Date, endDate: Date }): Promise<Accommodation[]> {
         const accommodations = await this.prisma.accommodation.findMany({
+            take: 20,
+            skip: (page - 1) * 20,
             where: {
                 status: 'AVAILABLE',
             },
@@ -56,6 +58,28 @@ export class PrismaAccommodationsRepository implements AccommodationsRepository 
         });
 
         return availableAccommodations.map(PrismaAccommodationMapper.toDomain);
+    }
+
+    async findReservedDates(accommodationId: string): Promise<{ checkIn: Date, checkOut: Date }[]> {
+        const reservations = await this.prisma.reservation.findMany({
+            where: {
+                accommodationId: accommodationId,
+                status: 'CONFIRMED'
+            },
+            select: {
+                checkInDate: true,
+                checkOutDate: true
+            }
+        });
+
+        const reservedDates = reservations.map(reservation => {
+            return {
+                checkIn: new Date(reservation.checkInDate),
+                checkOut: new Date(reservation.checkOutDate)
+            };
+        });
+
+        return reservedDates;
     }
 
 }
