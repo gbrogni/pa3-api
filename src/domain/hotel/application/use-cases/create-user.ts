@@ -22,7 +22,7 @@ export class CreateUserUseCase {
         private hashGenerator: HashGenerator
     ) { }
 
-    async execute({ name, phone, email, password }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+    async execute({ name, email, password }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
         const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
         if (userWithSameEmail) {
@@ -31,7 +31,7 @@ export class CreateUserUseCase {
 
         const hashedPassword = await this.hashGenerator.hash(password);
 
-        const user = User.create({ name, phone, email, password: hashedPassword });
+        const user = User.create({ name, email, password: hashedPassword });
 
         await this.usersRepository.create(user);
 

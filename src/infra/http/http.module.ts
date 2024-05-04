@@ -17,9 +17,12 @@ import { FetchAccommodationsByRangeController } from './controllers/fetch-accomm
 import { FetchAccommodationsByRangeUseCase } from '@/domain/hotel/application/use-cases/fetch-accommodations-by-range';
 import { MakePaymentController } from './controllers/make-payment.controller';
 import { MakePaymentUseCase } from '@/domain/hotel/application/use-cases/make-payment';
+import { ValidatePaymentController } from './controllers/validate-payment.controller';
+import { ValidatePaymentUseCase } from '@/domain/hotel/application/use-cases/validate-payment';
+import { StorageModule } from '../storage/storage.module';
 
 @Module({
-    imports: [DatabaseModule, CryptographyModule],
+    imports: [DatabaseModule, CryptographyModule, StorageModule],
     controllers: [
         AuthenticateController,
         CancelReservationController,
@@ -28,7 +31,8 @@ import { MakePaymentUseCase } from '@/domain/hotel/application/use-cases/make-pa
         FetchAccommodationsController,
         GetAccommodationAvailabilityController,
         GetAccommodationBySlugController,
-        MakePaymentController
+        MakePaymentController,
+        ValidatePaymentController
     ],
     providers: [
         AuthenticateUserUseCase,
@@ -38,7 +42,8 @@ import { MakePaymentUseCase } from '@/domain/hotel/application/use-cases/make-pa
         FetchAccommodationsUseCase,
         GetAccommodationAvailabilityUseCase,
         GetAccommodationBySlugUseCase,
-        MakePaymentUseCase
+        MakePaymentUseCase,
+        ValidatePaymentUseCase
     ]
 })
 export class HttpModule { }
