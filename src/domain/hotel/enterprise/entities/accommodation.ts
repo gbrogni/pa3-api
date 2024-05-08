@@ -1,7 +1,9 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { AggregateRoot } from '@/core/entities/aggregate-root';
-import { AccomodationCreatedEvent } from '../events/accomodation-created-event';
 import { Slug } from './value-objects/slug';
+import { AccommodationImageList } from './accommodation-image-list';
+import { Optional } from '@/core/types/optional';
+import { ReservationList } from './reservation-list';
 
 export enum AccommodationStatus {
     AVAILABLE = 'AVAILABLE',
@@ -15,6 +17,8 @@ export interface AccommodationProps {
     slug: Slug;
     price: number;
     status: AccommodationStatus;
+    images: AccommodationImageList;
+    reservations: ReservationList;
 }
 
 export class Accommodation extends AggregateRoot<AccommodationProps> {
@@ -39,16 +43,29 @@ export class Accommodation extends AggregateRoot<AccommodationProps> {
         return this.props.status;
     }
 
-    static create(props: AccommodationProps, id?: UniqueEntityID) {
-        const accomodation = new Accommodation({
-            ...props
-        });
+    get images() {
+        return this.props.images;
+    }
 
-        if (id) {
-            accomodation.addDomainEvent(new AccomodationCreatedEvent(accomodation));
-        }
+    get reservations() {
+        return this.props.reservations;
+    }
 
-        return accomodation;
+    static create(
+        props: Optional<AccommodationProps, 'slug' | 'images' | 'reservations'>,
+        id?: UniqueEntityID,
+    ) {
+        const accommodation = new Accommodation(
+            {
+                ...props,
+                slug: props.slug ?? Slug.createFromText(props.name),
+                images: props.images ?? new AccommodationImageList(),
+                reservations: props.reservations ?? new ReservationList(),
+            },
+            id,
+        );
+
+        return accommodation;
     }
 
 }

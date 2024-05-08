@@ -1,5 +1,5 @@
 import { AccommodationsRepository } from '@/domain/hotel/application/repositories/accommodations-repository';
-import { Accommodation, AccommodationStatus } from '@/domain/hotel/enterprise/entities/accommodation';
+import { Accommodation } from '@/domain/hotel/enterprise/entities/accommodation';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { PaginationParams } from '@/core/repositories/pagination-params';
@@ -14,15 +14,23 @@ export class PrismaAccommodationsRepository implements AccommodationsRepository 
 
     async findAll({ page }: PaginationParams): Promise<Accommodation[]> {
         const accommodations = await this.prisma.accommodation.findMany({
+            include: {
+                Image: true,
+                Reservation: true,
+            },
             take: 20,
             skip: (page - 1) * 20,
         });
 
-        return accommodations.map(PrismaAccommodationMapper.toDomain);
+        return accommodations.map(accommodation => PrismaAccommodationMapper.toDomain(accommodation, accommodation.Image, accommodation.Reservation));
     }
 
     async findBySlug(slug: string): Promise<Accommodation | null> {
         const accommodation = await this.prisma.accommodation.findUnique({
+            include: {
+                Image: true,
+                Reservation: true,
+            },
             where: {
                 slug
             }
@@ -32,10 +40,10 @@ export class PrismaAccommodationsRepository implements AccommodationsRepository 
             return null;
         }
 
-        return PrismaAccommodationMapper.toDomain(accommodation);
+        return PrismaAccommodationMapper.toDomain(accommodation, accommodation.Image);
     }
 
-    async findByRange({ page, startDate, endDate }: { page: number, startDate: Date, endDate: Date }): Promise<Accommodation[]> {
+    async findByRange({ page, startDate, endDate }: { page: number, startDate: Date, endDate: Date; }): Promise<Accommodation[]> {
         const accommodations = await this.prisma.accommodation.findMany({
             take: 20,
             skip: (page - 1) * 20,
@@ -44,6 +52,7 @@ export class PrismaAccommodationsRepository implements AccommodationsRepository 
             },
             include: {
                 Reservation: true,
+                Image: true,
             }
         });
 
@@ -57,10 +66,10 @@ export class PrismaAccommodationsRepository implements AccommodationsRepository 
             return !overlappingReservation;
         });
 
-        return availableAccommodations.map(PrismaAccommodationMapper.toDomain);
+        return availableAccommodations.map(accommodation => PrismaAccommodationMapper.toDomain(accommodation, accommodation.Image));
     }
 
-    async findReservedDates(accommodationId: string): Promise<{ checkIn: Date, checkOut: Date }[]> {
+    async findReservedDates(accommodationId: string): Promise<{ checkIn: Date, checkOut: Date; }[]> {
         const reservations = await this.prisma.reservation.findMany({
             where: {
                 accommodationId: accommodationId,

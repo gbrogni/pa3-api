@@ -7,7 +7,6 @@ import { HashGenerator } from '../cryptography/hash-generator';
 
 interface CreateUserUseCaseRequest {
     name: string;
-    phone: string;
     email: string;
     password: string;
 }

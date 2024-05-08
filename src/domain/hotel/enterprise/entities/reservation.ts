@@ -1,6 +1,5 @@
 import { AggregateRoot } from '@/core/entities/aggregate-root';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { ReservationCreatedEvent } from '../events/reservation-created-event';
 
 export enum ReservationStatus {
     PENDING = 'PENDING',
@@ -46,10 +45,6 @@ export class Reservation extends AggregateRoot<ReservationProps> {
         const reservation = new Reservation({
             ...props
         }, id);
-
-        if (id) {
-            reservation.addDomainEvent(new ReservationCreatedEvent(reservation));
-        }
 
         return reservation;
     }

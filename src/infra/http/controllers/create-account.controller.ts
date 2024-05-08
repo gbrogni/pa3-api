@@ -7,7 +7,6 @@ import { UserAlreadyExistsError } from '@/domain/hotel/application/errors/user-a
 
 const createAccountBodySchema = z.object({
     name: z.string(),
-    phone: z.string(),
     email: z.string().email(),
     password: z.string(),
 });
@@ -26,11 +25,10 @@ export class CreateAccountController {
     @HttpCode(201)
     @UsePipes(new ZodValidationPipe(createAccountBodySchema))
     async handle(@Body() body: CreateAccountBodySchema) {
-        const { name, phone, email, password } = body
+        const { name, email, password } = body
 
         const result = await this.createUser.execute({
             name,
-            phone,
             email,
             password,
         });
