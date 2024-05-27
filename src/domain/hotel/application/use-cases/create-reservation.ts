@@ -11,7 +11,7 @@ interface CreateReservationUseCaseRequest {
     userId: string;
 }
 
-type CreateReservationUseCaseResponse = Either<null, { reservation: Reservation }>;
+type CreateReservationUseCaseResponse = Either<null, { reservationId: string }>;
 
 @Injectable()
 export class CreateReservationUseCase {
@@ -37,7 +37,8 @@ export class CreateReservationUseCase {
 
         await this.reservationsRepository.create(reservation);
 
-        return right({ reservation });
+        // Retorne apenas o ID da reserva
+        return right({ reservationId: reservation.id.toString() });
     }
 
 }

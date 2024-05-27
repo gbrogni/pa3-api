@@ -6,8 +6,9 @@ import { z } from 'zod';
 import { CreateReservationUseCase } from '@/domain/hotel/application/use-cases/create-reservation';
 
 const createReservationBodySchema = z.object({
-    checkIn: z.date(),
-    checkOut: z.date(),
+    checkIn: z.string(),
+    checkOut: z.string(),
+    accommodationId: z.string()
 });
 
 const bodyValidationPipe = new ZodValidationPipe(createReservationBodySchema);
@@ -25,14 +26,13 @@ export class CreateReservationController {
     async handle(
         @Body(bodyValidationPipe) body: CreateReservationBodySchema,
         @CurrentUser() user: UserPayload,
-        @Param('accommodationId') accommodationId: string
     ) {
-        const { checkIn, checkOut } = body;
+        const { checkIn, checkOut, accommodationId } = body;
         const userId = user.sub;
 
         const result = await this.createReservationUseCase.execute({
-            checkIn,
-            checkOut,
+            checkIn: new Date(checkIn),
+            checkOut: new Date(checkOut),
             userId,
             accommodationId
         });
@@ -40,5 +40,7 @@ export class CreateReservationController {
         if (result.isLeft()) {
             throw new BadRequestException();
         }
+
+        return result.value;
     }
 }

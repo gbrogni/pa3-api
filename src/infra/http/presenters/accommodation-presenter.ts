@@ -3,7 +3,7 @@ import { Accommodation } from "@/domain/hotel/enterprise/entities/accommodation"
 export class AccommodationPresenter {
     static toHTTP(accommodation: Accommodation) {
         return {
-            id: accommodation.id,
+            id: accommodation.id.toString(),
             name: accommodation.name,
             description: accommodation.description,
             price: accommodation.price,

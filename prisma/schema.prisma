@@ -19,10 +19,18 @@ enum ReservationStatus {
   CANCELLED
 }
 
+enum PaymentMethod {
+  CARD
+  PAYPAL
+  APPLE
+}
+
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  name     String?
+  id       String @id @default(uuid())
+  email    String @unique
+  cpf      String @unique
+  name     String
+  phone    String
   password String
 
   @@map("users")
@@ -43,10 +51,15 @@ model Reservation {
 }
 
 model Payment {
-  id            String   @id @default(uuid())
+  id            String        @id @default(uuid())
   amount        Float
-  paymentDate   DateTime @map("payment_date")
-  reservationId String   @unique @map("reservation_id")
+  paymentDate   DateTime      @map("payment_date")
+  reservationId String        @unique @map("reservation_id")
+  paymentMethod PaymentMethod @map("payment_method")
+  cardNumber    String?       @map("card_number")
+  cardName      String?       @map("card_name")
+  expiryDate    DateTime?       @map("expiry_date")
+  cvc           String?
 
   reservation Reservation @relation(fields: [reservationId], references: [id])
 

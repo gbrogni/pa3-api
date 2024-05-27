@@ -7,9 +7,11 @@ POST {{baseUrl}}/accounts
 Content-Type: application/json
 
 {
+  "email": "123@gmail.com",
+  "cpf": "12345678900",
   "name": "Gabriel Brogni",
-  "email": "harden13brogni@gmail.com",
-  "password": "123456"
+  "phone": "123456789",
+  "password": "123"
 }
 
 ###
@@ -19,8 +21,8 @@ POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 {
-  "email": "harden13brogni@gmail.com",
-  "password": "123456"
+  "email": "123@gmail.com",
+  "password": "123"
 }
 
 ###

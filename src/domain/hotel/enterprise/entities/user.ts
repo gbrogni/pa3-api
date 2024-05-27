@@ -4,6 +4,8 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 export interface UserProps {
     name: string;
     email: string;
+    cpf: string
+    phone: string;
     password: string;
 }
 
@@ -15,6 +17,14 @@ export class User extends Entity<UserProps> {
 
     get email() {
         return this.props.email;
+    }
+
+    get cpf() {
+        return this.props.cpf;
+    }
+
+    get phone() {
+        return this.props.phone;
     }
 
     get password() {

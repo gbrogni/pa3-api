@@ -24,15 +24,15 @@ export class AuthenticateController {
     @UsePipes(new ZodValidationPipe(authenticateBodySchema))
     async handle(@Body() body: AuthenticateBodySchema) {
         const { email, password } = body;
-
+    
         const result = await this.authenticateUser.execute({
             email,
             password,
         });
-
+    
         if (result.isLeft()) {
             const error = result.value;
-
+    
             switch (error.constructor) {
                 case WrongCredentialsError:
                     throw new UnauthorizedException(error.message);
@@ -40,9 +40,9 @@ export class AuthenticateController {
                     throw new BadRequestException(error.message);
             }
         }
-
+    
         const { accessToken } = result.value;
-
+    
         return {
             access_token: accessToken,
         };

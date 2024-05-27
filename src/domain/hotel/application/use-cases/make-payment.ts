@@ -11,9 +11,14 @@ interface MakePaymentUseCaseRequest {
     amount: number;
     paymentDate: Date;
     reservationId: string;
+    paymentMethod: string;
+    cardNumber: string;
+    cardName: string;
+    expiryDate: Date;
+    cvc: string;
 }
 
-type MakePaymentUseCaseResponse = Either<ResourceNotFoundError, { payment: Payment }>;
+type MakePaymentUseCaseResponse = Either<ResourceNotFoundError, boolean>;
 
 @Injectable()
 export class MakePaymentUseCase {
@@ -27,12 +32,22 @@ export class MakePaymentUseCase {
         amount,
         paymentDate,
         reservationId,
+        paymentMethod,
+        cardNumber,
+        cardName,
+        expiryDate,
+        cvc,
     }: MakePaymentUseCaseRequest): Promise<MakePaymentUseCaseResponse> {
 
         const payment = Payment.create({
             amount,
             paymentDate,
-            reservationId: new UniqueEntityID(reservationId)
+            reservationId: new UniqueEntityID(reservationId),
+            paymentMethod: Payment.getPaymentMethod(paymentMethod),
+            cardNumber,
+            cardName,
+            expiryDate,
+            cvc
         });
 
         const reservation = await this.reservationsRepository.findById(reservationId);
@@ -44,7 +59,7 @@ export class MakePaymentUseCase {
         await this.reservationsRepository.updateStatus(reservationId, ReservationStatus.CONFIRMED);
         await this.paymentsRepository.create(payment);
 
-        return right({ payment });
+        return right(true);
     }
 
 }

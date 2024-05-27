@@ -8,6 +8,8 @@ import { HashGenerator } from '../cryptography/hash-generator';
 interface CreateUserUseCaseRequest {
     name: string;
     email: string;
+    cpf: string;
+    phone: string;
     password: string;
 }
 
@@ -21,7 +23,7 @@ export class CreateUserUseCase {
         private hashGenerator: HashGenerator
     ) { }
 
-    async execute({ name, email, password }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+    async execute({ name, email, cpf, phone, password }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
         const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
         if (userWithSameEmail) {
@@ -30,7 +32,7 @@ export class CreateUserUseCase {
 
         const hashedPassword = await this.hashGenerator.hash(password);
 
-        const user = User.create({ name, email, password: hashedPassword });
+        const user = User.create({ name, email, cpf, phone, password: hashedPassword });
 
         await this.usersRepository.create(user);
 

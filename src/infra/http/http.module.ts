@@ -20,6 +20,12 @@ import { MakePaymentUseCase } from '@/domain/hotel/application/use-cases/make-pa
 import { ValidatePaymentController } from './controllers/validate-payment.controller';
 import { ValidatePaymentUseCase } from '@/domain/hotel/application/use-cases/validate-payment';
 import { StorageModule } from '../storage/storage.module';
+import { VerifyTokenController } from './controllers/verify-token.controller';
+import { VerifyTokenUseCase } from '@/domain/hotel/application/use-cases/verify-token';
+import { GetUserInfoController } from './controllers/get-user-info.controller';
+import { GetUserInfoUseCase } from '@/domain/hotel/application/use-cases/get-user-info';
+import { CreateReservationController } from './controllers/create-reservation.controller';
+import { CreateReservationUseCase } from '@/domain/hotel/application/use-cases/create-reservation';
 
 @Module({
     imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -27,23 +33,29 @@ import { StorageModule } from '../storage/storage.module';
         AuthenticateController,
         CancelReservationController,
         CreateAccountController,
+        CreateReservationController,
         FetchAccommodationsByRangeController,
         FetchAccommodationsController,
         GetAccommodationAvailabilityController,
         GetAccommodationBySlugController,
+        GetUserInfoController,
         MakePaymentController,
-        ValidatePaymentController
+        ValidatePaymentController,
+        VerifyTokenController
     ],
     providers: [
         AuthenticateUserUseCase,
         CancelReservationUseCase,
         CreateUserUseCase,
+        CreateReservationUseCase,
         FetchAccommodationsByRangeUseCase,
         FetchAccommodationsUseCase,
         GetAccommodationAvailabilityUseCase,
         GetAccommodationBySlugUseCase,
+        GetUserInfoUseCase,
         MakePaymentUseCase,
-        ValidatePaymentUseCase
+        ValidatePaymentUseCase,
+        VerifyTokenUseCase
     ]
 })
 export class HttpModule { }
