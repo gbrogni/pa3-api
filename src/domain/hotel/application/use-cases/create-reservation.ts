@@ -37,7 +37,6 @@ export class CreateReservationUseCase {
 
         await this.reservationsRepository.create(reservation);
 
-        // Retorne apenas o ID da reserva
         return right({ reservationId: reservation.id.toString() });
     }
 

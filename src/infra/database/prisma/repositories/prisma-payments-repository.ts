@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { PaymentsRepository } from '@/domain/hotel/application/repositories/payments-repository';
-import { Payment } from '@/domain/hotel/enterprise/entities/payment';
-import { PrismaPaymentMapper } from '../mappers/prisma-payment-mapper';
+import { PixPayment } from '@/domain/hotel/enterprise/entities/pix-payment';
+import { PrismaPixPaymentMapper } from '../mappers/prisma-pix-payment-mapper';
 
 @Injectable()
 export class PrismaPaymentsRepository implements PaymentsRepository {
@@ -11,25 +11,33 @@ export class PrismaPaymentsRepository implements PaymentsRepository {
         private prisma: PrismaService
     ) { }
 
-    async create(payment: Payment): Promise<void> {
-        const data = PrismaPaymentMapper.toPrisma(payment);
+    async create(payment: PixPayment): Promise<void> {
+        const data = PrismaPixPaymentMapper.toPrisma(payment);
 
         await this.prisma.payment.create({
             data
         });
     }
 
-    async findByReservationId(reservationId: string): Promise<Payment | null> {
-        const payment = await this.prisma.payment.findFirst({
-            where: {
-                reservationId
-            }
-        });
+    // async createPixPayment(payment: PixPayment): Promise<void> {
+    //     const data = PrismaPaymentMapper.toPrisma(payment);
 
-        if (!payment) {
-            return null;
-        }
+    //     await this.prisma.payment.create({
+    //         data
+    //     });
+    // }
 
-        return PrismaPaymentMapper.toDomain(payment);
-    }
+    // async findByReservationId(reservationId: string): Promise<Payment | null> {
+    //     const payment = await this.prisma.payment.findFirst({
+    //         where: {
+    //             reservationId
+    //         }
+    //     });
+
+    //     if (!payment) {
+    //         return null;
+    //     }
+
+    //     return PrismaPaymentMapper.toDomain(payment);
+    // }
 }

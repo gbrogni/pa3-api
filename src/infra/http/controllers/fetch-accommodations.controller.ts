@@ -32,6 +32,8 @@ export class FetchAccommodationsController {
 
         const accommodations = result.value.accommodations;
 
-        return { accommodations: accommodations.map(AccommodationPresenter.toHTTP) };
+        const accommodationsMapped = accommodations.map(AccommodationPresenter.toHTTP);
+
+        return { accommodations: accommodationsMapped };
     }
 }

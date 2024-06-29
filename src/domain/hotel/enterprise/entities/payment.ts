@@ -1,6 +1,5 @@
 import { AggregateRoot } from '@/core/entities/aggregate-root';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { PaymentPaidEvent } from '../events/payment-paid-event';
 
 export enum PaymentMethod {
     CARD = 'CARD',

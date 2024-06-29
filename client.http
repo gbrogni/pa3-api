@@ -27,14 +27,15 @@ Content-Type: application/json
 
 ###
 
-# @name create_question
-POST {{baseUrl}}/questions
+# @name create_pix
+POST {{baseUrl}}/reservations/pix
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "title": "Nova pergunta 3",
-  "content": "conteúdo da pergunta"
+  "value": 100,
+  "city": "City Name",
+  "key": "13072038929"
 }
 
 ###
@@ -43,16 +44,3 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/accommodations?page=1
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
-
-
-###
-
-# @name create_question
-PUT {{baseUrl}}/questions/75ef2457-f08a-454c-8c23-e2877e69b12a
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-{
-  "title": "Nova pergunta 3 editada",
-  "content": "conteúdo da pergunta 3 editada"
-}

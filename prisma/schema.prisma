@@ -51,15 +51,10 @@ model Reservation {
 }
 
 model Payment {
-  id            String        @id @default(uuid())
-  amount        Float
-  paymentDate   DateTime      @map("payment_date")
-  reservationId String        @unique @map("reservation_id")
-  paymentMethod PaymentMethod @map("payment_method")
-  cardNumber    String?       @map("card_number")
-  cardName      String?       @map("card_name")
-  expiryDate    DateTime?       @map("expiry_date")
-  cvc           String?
+  id            String @id @default(uuid())
+  reservationId String @unique @map("reservation_id")
+  userId        String @map("user_id")
+  value         Float
 
   reservation Reservation @relation(fields: [reservationId], references: [id])
 

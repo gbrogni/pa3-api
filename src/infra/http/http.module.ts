@@ -17,15 +17,13 @@ import { FetchAccommodationsByRangeController } from './controllers/fetch-accomm
 import { FetchAccommodationsByRangeUseCase } from '@/domain/hotel/application/use-cases/fetch-accommodations-by-range';
 import { MakePaymentController } from './controllers/make-payment.controller';
 import { MakePaymentUseCase } from '@/domain/hotel/application/use-cases/make-payment';
-import { ValidatePaymentController } from './controllers/validate-payment.controller';
-import { ValidatePaymentUseCase } from '@/domain/hotel/application/use-cases/validate-payment';
 import { StorageModule } from '../storage/storage.module';
-import { VerifyTokenController } from './controllers/verify-token.controller';
-import { VerifyTokenUseCase } from '@/domain/hotel/application/use-cases/verify-token';
 import { GetUserInfoController } from './controllers/get-user-info.controller';
 import { GetUserInfoUseCase } from '@/domain/hotel/application/use-cases/get-user-info';
 import { CreateReservationController } from './controllers/create-reservation.controller';
 import { CreateReservationUseCase } from '@/domain/hotel/application/use-cases/create-reservation';
+import { GeneratePixController } from './controllers/generate-pix.controller';
+import { GenerateQRCodePixUseCase } from '@/domain/hotel/application/use-cases/make-pix';
 
 @Module({
     imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -40,8 +38,7 @@ import { CreateReservationUseCase } from '@/domain/hotel/application/use-cases/c
         GetAccommodationBySlugController,
         GetUserInfoController,
         MakePaymentController,
-        ValidatePaymentController,
-        VerifyTokenController
+        GeneratePixController,
     ],
     providers: [
         AuthenticateUserUseCase,
@@ -50,12 +47,16 @@ import { CreateReservationUseCase } from '@/domain/hotel/application/use-cases/c
         CreateReservationUseCase,
         FetchAccommodationsByRangeUseCase,
         FetchAccommodationsUseCase,
+        GenerateQRCodePixUseCase,
+        {
+            provide: 'VERSION',
+            useValue: '01', 
+        },
         GetAccommodationAvailabilityUseCase,
         GetAccommodationBySlugUseCase,
         GetUserInfoUseCase,
         MakePaymentUseCase,
-        ValidatePaymentUseCase,
-        VerifyTokenUseCase
-    ]
+    ],
+    
 })
 export class HttpModule { }

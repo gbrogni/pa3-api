@@ -6,16 +6,12 @@ import { PaymentsRepository } from '../repositories/payments-repository';
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error';
 import { ReservationStatus } from '../../enterprise/entities/reservation';
 import { ReservationsRepository } from '../repositories/reservations-repository';
+import { PixPayment } from '../../enterprise/entities/pix-payment';
 
 interface MakePaymentUseCaseRequest {
-    amount: number;
-    paymentDate: Date;
+    userId: string;
     reservationId: string;
-    paymentMethod: string;
-    cardNumber: string;
-    cardName: string;
-    expiryDate: Date;
-    cvc: string;
+    value: number;
 }
 
 type MakePaymentUseCaseResponse = Either<ResourceNotFoundError, boolean>;
@@ -28,27 +24,7 @@ export class MakePaymentUseCase {
         private reservationsRepository: ReservationsRepository
     ) { }
 
-    async execute({
-        amount,
-        paymentDate,
-        reservationId,
-        paymentMethod,
-        cardNumber,
-        cardName,
-        expiryDate,
-        cvc,
-    }: MakePaymentUseCaseRequest): Promise<MakePaymentUseCaseResponse> {
-
-        const payment = Payment.create({
-            amount,
-            paymentDate,
-            reservationId: new UniqueEntityID(reservationId),
-            paymentMethod: Payment.getPaymentMethod(paymentMethod),
-            cardNumber,
-            cardName,
-            expiryDate,
-            cvc
-        });
+    async execute({ reservationId, userId, value }: MakePaymentUseCaseRequest): Promise<MakePaymentUseCaseResponse> {
 
         const reservation = await this.reservationsRepository.findById(reservationId);
 
@@ -56,8 +32,14 @@ export class MakePaymentUseCase {
             return left(new ResourceNotFoundError());
         }
 
+        const pix = PixPayment.create({
+            reservationId,
+            userId,
+            value
+        });
+
         await this.reservationsRepository.updateStatus(reservationId, ReservationStatus.CONFIRMED);
-        await this.paymentsRepository.create(payment);
+        await this.paymentsRepository.create(pix);
 
         return right(true);
     }
