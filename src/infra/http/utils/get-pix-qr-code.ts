@@ -8,8 +8,6 @@ export const getPixBrCode = async (value: number, userId: string, pix: Pix) => {
             name: userId,
             key: pix.key,
             city: pix.city,
-            // message: pix.message,
-            // transactionId?: string;
         };
         const { data, error } = await qrCodePixGenerator.generate({
             ...payload,

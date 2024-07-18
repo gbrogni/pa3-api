@@ -3,7 +3,6 @@ import { GetUserInfoUseCase } from '@/domain/hotel/application/use-cases/get-use
 import { CurrentUser } from '@/infra/auth/current-user-decorator';
 import { UserPayload } from '@/infra/auth/jwt.strategy';
 import { BadRequestException, Controller, Get, UnauthorizedException } from '@nestjs/common';
-import { UserInfo } from '@/domain/hotel/application/use-cases/get-user-info'; // Import the UserInfo type
 
 @Controller('/me')
 export class GetUserInfoController {
@@ -12,7 +11,7 @@ export class GetUserInfoController {
     ) {}
 
     @Get()
-    async handle(@CurrentUser() user: UserPayload) { // Use the UserInfo type as the return type
+    async handle(@CurrentUser() user: UserPayload) {
         const userId = user.sub;
         const result = await this.usersService.execute({userId});
 

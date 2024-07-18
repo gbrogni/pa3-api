@@ -3,19 +3,16 @@ import { WrongCredentialsError } from '../errors/wrong-credentials-error';
 import { Injectable } from '@nestjs/common';
 import { Encrypter } from '../cryptography/encrypter';
 import { UsersRepository } from '../repositories/users-repository';
-import { User } from '../../enterprise/entities/user';
 
 interface GetUserInfoUseCaseRequest {
     userId: string;
 }
 
-// Define a new type that includes the properties of the user that you want to return
 export interface UserInfo {
     name: string;
     email: string;
     cpf: string;
     phone: string;
-    // Add any other properties that you want to return
 }
 
 type GetUserInfoUseCaseResponse = Either<WrongCredentialsError, UserInfo>;
@@ -23,7 +20,6 @@ type GetUserInfoUseCaseResponse = Either<WrongCredentialsError, UserInfo>;
 @Injectable()
 export class GetUserInfoUseCase {
     constructor(
-        private encrypter: Encrypter,
         private usersRepository: UsersRepository,
     ) { }
 
