@@ -5,39 +5,36 @@ import { Injectable } from '@nestjs/common';
 import { ReservationsRepository } from '../repositories/reservations-repository';
 
 interface CreateReservationUseCaseRequest {
-    checkIn: Date;
-    checkOut: Date;
-    accommodationId: string;
-    userId: string;
+  checkIn: Date;
+  checkOut: Date;
+  accommodationId: string;
+  userId: string;
 }
 
-type CreateReservationUseCaseResponse = Either<null, { reservationId: string }>;
+type CreateReservationUseCaseResponse = Either<null, { reservationIds: string[]; }>;
 
 @Injectable()
 export class CreateReservationUseCase {
 
-    constructor(
-        private reservationsRepository: ReservationsRepository,
-    ) { }
+  constructor(
+    private reservationsRepository: ReservationsRepository,
+  ) { }
 
-    async execute({
-        checkIn,
-        checkOut,
-        accommodationId: accomodationId,
-        userId,
-    }: CreateReservationUseCaseRequest): Promise<CreateReservationUseCaseResponse> {
+  async execute(requests: CreateReservationUseCaseRequest[]): Promise<CreateReservationUseCaseResponse> {
+    const reservations = requests.map(request =>
+      Reservation.create({
+        checkIn: request.checkIn,
+        checkOut: request.checkOut,
+        accomodationId: new UniqueEntityID(request.accommodationId),
+        userId: new UniqueEntityID(request.userId),
+        status: ReservationStatus.PENDING
+      })
+    );
+    
+    await this.reservationsRepository.create(reservations);
 
-        const reservation = Reservation.create({
-            checkIn,
-            checkOut,
-            accomodationId: new UniqueEntityID(accomodationId),
-            userId: new UniqueEntityID(userId),
-            status: ReservationStatus.PENDING
-        });
+    const reservationIds = reservations.map(reservation => reservation.id.toString());
 
-        await this.reservationsRepository.create(reservation);
-
-        return right({ reservationId: reservation.id.toString() });
-    }
-
+    return right({ reservationIds });
+  }
 }
