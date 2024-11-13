@@ -16,6 +16,8 @@ Você deve ter o NPM, Docker instalados na sua máquina e o NodeJs instalado pel
 
 5 - Crie um arquivo na raiz do projeto `.env` e cole o conteúdo do arquivo `.env.example` nesse novo arquivo.
 
-6 - Localize o arquivo `seed.ts` na pasta prisma, execute esse arquivo para ter uma base de dados, indico ter a extensão `Code runner` para executar o arquivo.
+6 - Execute o comando `npx prisma migrate dev` no terminal do projeto.
 
-7 - Execute o projeto com o comando `npm run start:dev`.
+7 - Localize o arquivo `seed.ts` na pasta prisma, execute esse arquivo para ter uma base de dados, indico ter a extensão `Code runner` para executar o arquivo.
+
+8 - Execute o projeto com o comando `npm run start:dev`.
