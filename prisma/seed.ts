@@ -3,16 +3,6 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function seed() {
-  await prisma.user.create({
-    data: {
-      name: 'Gabriel Brogni',
-      email: '123@gmail.com',
-      cpf: '12345678900',
-      phone: '123456789',
-      password: '123'
-    }
-  });
-
   const accommodation = await prisma.accommodation.create({
     data: {
       name: 'Villa de Luxo',
