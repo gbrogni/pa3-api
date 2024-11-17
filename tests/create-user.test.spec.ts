@@ -68,10 +68,6 @@ describe('CreateUserUseCase', () => {
     );
 });
 
-
-
-
-
 it('should create a user successfully', async () => {
     jest.spyOn(usersRepository, 'findByEmail').mockResolvedValueOnce(null);
     jest.spyOn(usersRepository, 'create').mockResolvedValueOnce(undefined);
